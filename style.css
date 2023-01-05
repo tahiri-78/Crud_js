@@ -1,0 +1,89 @@
+
+*{
+    padding:0;
+    margin: 0;
+}
+
+
+body{
+    background-color: rgb(31, 31, 12);
+    color: beige;
+    font-size: 15px;
+}
+.head{
+text-transform: uppercase;
+
+text-align: center;
+color: aliceblue;
+font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+margin: 20px 0;
+}
+
+.crud{
+    width: 80%;
+    margin: auto;
+    
+}
+input{
+    background-color: rgb(41, 37, 37);
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    margin: 8px;
+    width: 100%;
+    height: 30%;
+    color: rgb(218, 210, 210);
+}
+
+#totale{
+    border-radius: 2px;
+    background-color: brown;
+    padding: 4px 2px;
+}
+#totale::before{
+    content: 'Total: ';
+}
+
+input:focus{
+    background-color: rgb(14, 13, 13);
+    transform: scale(1.02);
+}
+.input input{
+    width: 100%;
+}
+.price input{
+    width: 20%;
+}
+button{
+    width: 100%;
+    height: 30px;
+    border: none;
+    cursor: pointer;
+    color: aliceblue;
+    transition: 0.8s;
+    background-color: rgb(49, 11, 85);
+    border-radius: 15px;
+}
+button:hover{
+    background-color: rgb(91, 34, 145);
+    letter-spacing: 2px;
+}
+.btnSerach{
+    display: flex;
+    justify-content: space-between;
+}
+.btnSerach button{
+    width: 45%;
+}
+table{
+    width: 100%;
+    text-align: center;
+    margin: 3px;
+}
+table th{
+    text-transform: uppercase;
+
+}
+th,td {
+    padding: 5px;
+}
