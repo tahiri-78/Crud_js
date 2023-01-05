@@ -23,15 +23,15 @@
    <div class="input">
      <input type="text" name="title" placeholder="titre" id="title">
      <div class="price">
-        <input type="number" placeholder="prix" name="price" id="price">
-        <input type="number" placeholder="taxes" name="taxes" id="taxes">
-        <input type="number" placeholder="ads" name="ads" id="ads">
-        <input type="number" placeholder="remise" name="discout" id="discout">
+        <input type="number" onkeyup="calcule()" placeholder="prix" name="price" id="price">
+        <input type="number"onkeyup="calcule()"  placeholder="taxes" name="taxes" id="taxes">
+        <input type="number" onkeyup="calcule()" placeholder="ads" name="ads" id="ads">
+        <input type="number" onkeyup="calcule()" placeholder="remise" name="discout" id="discout">
         <small id="totale">32151</small>
      </div>
      <input type="text" placeholder="count"  name="count" id="count">
      <input type="text" placeholder="category"  name="category" id="category">
-     <button id="create">Create</button>
+     <button   onclick="stocker()" id="create">Create</button>
    </div>
 
    <div class="output">
