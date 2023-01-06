@@ -6,6 +6,9 @@ let discout=document.getElementById("discout")
 let category=document.getElementById("category")
 let btn_create=document.getElementById("create")
 let totale=document.getElementById("totale")
+let count=document.getElementById("count")
+
+
 
 //function calcule : fonction pour calculer le montant totale----------------
 function calcule() {
@@ -23,22 +26,27 @@ function calcule() {
 
 }
 
-//function stocker : pour Stoker les données----------------
+
 
 
 
 
 
 //===============Creation du produit==================
-//tableau pour stocker les produits dans lacale storage
-    if (localStorage.product!= null) {
-        dataProducts=JSON.parse(localStorage.product)
-    }else{
-        let dataProducts=[] 
+//tableau pour stocker les produits ==>vers lacale storage
+      let dataProducts=[]  // declaration du tableau pour stockage
+      let id_changer=0  // ce variable est utilisé pour la modification d'un element
+
+
+
+    if (localStorage.product!= null) { // si local starage est non vide
+        dataProducts=JSON.parse(localStorage.product) // pour récuper les donées du local starage il faut rendre les données à l'etat initial 
     }
 
-    function stocker() {
-    //Creation d'un objet pour chaque produit
+    showData(); //affiche les données au moment de chargement
+
+function stocker() {  // fonction permet de socker les données dans la base
+    if (btn_create.className == "create") { // si l'attribue class= create ==> ajouter element dans la base
         let newPro={
             title:title.value,
             price:price.value,
@@ -46,10 +54,123 @@ function calcule() {
             ads:ads.value,
             discout:discout.value,
             totale:totale.innerHTML,
+            category:category.value,
+            count:count.value, 
         }
-    
-        dataProducts.push(newPro) // insertion
-        // mettre les données dans data storage(base de navigateur)
-        window.localStorage.setItem('product',JSON.stringify(dataProducts))
+
+        if (count.value > 1) { // tester;sinon risque d'ajouter le vide dans la base
+
+            for (let i = 0; i < count.value; i++) {
+
+                dataProducts.push(newPro); // insertion de tout les prods
+                
+            }
+            
+        }else{
+            dataProducts.push(newPro); // insertion d'un seul prd 
+        }  
+
+
+
+            window.localStorage.setItem('product',JSON.stringify(dataProducts)) // pour mettre les données dans locale starage il faut les mettre en "json.stringify"
+        } 
+        if (btn_create.className == "modif") { // si l'attribue class= create ==> Modifier element dans la base selon la fonction 
+        changer_donne(id_changer)  
+        } 
+
+    clearData();
+    showData(); 
 }
-//===============fin Creation du produit==================
+
+//===============fonction : vider les champs aprés chaque ajout ou modification==================
+function clearData() {
+    title.value=''
+    price.value=''
+    taxes.value=''
+    ads.value=''
+    discout.value=''
+    category.value=''
+    totale.innerHTML=''
+    count.value=''
+    title.focus(); // rendre le focus au debut
+}
+//===============fonction  : afficher les données stockés==================
+function showData() {
+     let tabl=document.getElementById("tbody")
+     let donnes='' //variabe pour stocker les donner avant affichage (on peut les mettre direct dans tbdoy)"
+    for (let i = 0; i < dataProducts.length; i++) {
+      
+        donnes+=`
+        <tr">
+        <td id="id_p">${i+1}</td>
+        <td>${dataProducts[i].title}</td>
+        <td>${dataProducts[i].price}</td>
+        <td>${dataProducts[i].taxes}</td>
+        <td>${dataProducts[i].ads}</td>
+        <td>${dataProducts[i].discout}</td>
+        <td>${dataProducts[i].totale}</td>
+        <td>${dataProducts[i].category}</td>
+        <td><button onclick="update_item(${i})"  id="update">updat</button></td>
+        <td><button onclick="delete_item(${i})" id="delete">delete</button></td> 
+     </tr>`
+        
+    }
+    
+     
+        tabl.innerHTML=donnes
+        
+}
+
+function delete_item(id) { //fonction permet de supprimer un element de la base
+  
+    dataProducts.splice(id,1) //supprimer d'abord de la table
+    // en fin mettre à jour les données dans storage
+    window.localStorage.setItem('product',JSON.stringify(dataProducts)) // pour mettre les données dans locale starage il faut les mettre en "json.stringify"
+    showData(); //affiche les données au moment de chargement ensuite affiche les donées
+}
+
+
+function update_item(id) {
+    
+
+    btn_create.setAttribute("class", "modif");
+    btn_create.innerHTML="Modifier"
+
+    //recuperer les données et les affichés dans le form
+    title.value=dataProducts[id].title
+    price.value=dataProducts[id].price
+    taxes.value=dataProducts[id].taxes
+    ads.value=dataProducts[id].ads
+    discout.value=dataProducts[id].discout
+    count.value=dataProducts[id].count
+    category.value=dataProducts[id].category
+    totale.innerHTML=dataProducts[id].totale
+    id_changer=id
+    title.focus(); // rendre le focus au debut
+      
+   
+}
+
+function changer_donne(id) {
+     //chercher l'element à changer avec id
+    for (let i = 0; i < dataProducts.length; i++) {
+        if (i==id) {
+            dataProducts[i].title=title.value
+            dataProducts[i].price=price.value
+            dataProducts[i].taxes=taxes.value
+            dataProducts[i].ads=ads.value
+            dataProducts[i].discout=discout.value
+            dataProducts[i].totale=totale.innerHTML
+            dataProducts[i].category=category.value
+            dataProducts[i].count=count.value
+           
+        } 
+    }
+
+   localStorage.setItem('product',JSON.stringify(dataProducts))
+   showData(); 
+   clearData()
+    btn_create.setAttribute("class", "create"); //attribuer le nom create à l'attribue class
+    btn_create.innerHTML="Create" //changer le nom du button 
+}
+

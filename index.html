@@ -27,11 +27,11 @@
         <input type="number"onkeyup="calcule()"  placeholder="taxes" name="taxes" id="taxes">
         <input type="number" onkeyup="calcule()" placeholder="ads" name="ads" id="ads">
         <input type="number" onkeyup="calcule()" placeholder="remise" name="discout" id="discout">
-        <small id="totale">32151</small>
+        <small id="totale"></small>
      </div>
      <input type="text" placeholder="count"  name="count" id="count">
      <input type="text" placeholder="category"  name="category" id="category">
-     <button   onclick="stocker()" id="create">Create</button>
+     <button  class="create" onclick="stocker()" id="create">Create</button>
    </div>
 
    <div class="output">
@@ -56,49 +56,10 @@
             <th>update</th>
             <th>delete</th>
         </tr>
-        <tbody>
-            <tr>
-               <td>1</td>
-               <td>samsung</td>
-               <td>2000</td>
-               <td>1000</td>
-               <td>1000</td>
-               <td>10</td>
-               <td>521.25</td>
-               <td>phone</td>
-               <td><button id="update">updat</button></td>
-               <td><button id="delete">delete</button></td>
-               
-                
-            </tr>
-            <tr>
-                <td>1</td>
-               <td>samsung</td>
-               <td>2000</td>
-               <td>1000</td>
-               <td>1000</td>
-               <td>10</td>
-               <td>521.25</td>
-               <td>phone</td>
-               <td><button id="update">updat</button></td>
-               <td><button id="delete">delete</button></td>
-                
-                 
-             </tr>
-             <tr>
-                <td>1</td>
-               <td>samsung</td>
-               <td>2000</td>
-               <td>1000</td>
-               <td>1000</td>
-               <td>10</td>
-               <td>521.25</td>
-               <td>phone</td>
-               <td><button id="update">updat</button></td>
-               <td><button id="delete">delete</button></td>
-                
-                 
-             </tr>
+        <tbody id="tbody">
+            
+             <!-- données exist dans stockage de navigateur gerer par javascript -->
+
         </tbody>
      </table>
 
