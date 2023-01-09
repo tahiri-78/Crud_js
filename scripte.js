@@ -8,7 +8,9 @@ let btn_create=document.getElementById("create")
 let totale=document.getElementById("totale")
 let count=document.getElementById("count")
 
+let type_d="create"
 
+let recherche_Mod=""
 
 //function calcule : fonction pour calculer le montant totale----------------
 function calcule() {
@@ -26,16 +28,12 @@ function calcule() {
 
 }
 
-
-
-
-
-
-
 //===============Creation du produit==================
 //tableau pour stocker les produits ==>vers lacale storage
       let dataProducts=[]  // declaration du tableau pour stockage
-      let id_changer=0  // ce variable est utilisé pour la modification d'un element
+      let id_changer // ce variable est utilisé pour la modification d'un element
+      let dataTrouve=[]; //table à remplir en cas de rechere se trove dans la fonction showData_trouve
+      
 
 
 
@@ -46,7 +44,7 @@ function calcule() {
     showData(); //affiche les données au moment de chargement
 
 function stocker() {  // fonction permet de socker les données dans la base
-    if (btn_create.className == "create") { // si l'attribue class= create ==> ajouter element dans la base
+    if (type_d == "create") { // si l'attribue class= create ==> ajouter element dans la base
         let newPro={
             title:title.value,
             price:price.value,
@@ -59,23 +57,18 @@ function stocker() {  // fonction permet de socker les données dans la base
         }
 
         if (count.value > 1) { // tester;sinon risque d'ajouter le vide dans la base
-
             for (let i = 0; i < count.value; i++) {
-
-                dataProducts.push(newPro); // insertion de tout les prods
-                
+              dataProducts.push(newPro); // insertion de tout les prods  
             }
             
         }else{
-            dataProducts.push(newPro); // insertion d'un seul prd 
+           dataProducts.push(newPro); // insertion d'un seul prd 
         }  
-
-
-
-            window.localStorage.setItem('product',JSON.stringify(dataProducts)) // pour mettre les données dans locale starage il faut les mettre en "json.stringify"
+           window.localStorage.setItem('product',JSON.stringify(dataProducts)) // pour mettre les données dans locale starage il faut les mettre en "json.stringify"
         } 
-        if (btn_create.className == "modif") { // si l'attribue class= create ==> Modifier element dans la base selon la fonction 
-        changer_donne(id_changer)  
+
+        if (type_d == "modif") { // si l'attribue class= create ==> Modifier element dans la base selon la fonction 
+           changer_donne(id_changer)  
         } 
 
     clearData();
@@ -115,11 +108,11 @@ function showData() {
      </tr>`
         
     }
-    
-     
         tabl.innerHTML=donnes
         
 }
+
+
 
 function delete_item(id) { //fonction permet de supprimer un element de la base
   
@@ -131,11 +124,10 @@ function delete_item(id) { //fonction permet de supprimer un element de la base
 
 
 function update_item(id) {
-    
 
-    btn_create.setAttribute("class", "modif");
+    // btn_create.setAttribute("class", "modif");
     btn_create.innerHTML="Modifier"
-
+    type_d="modif";
     //recuperer les données et les affichés dans le form
     title.value=dataProducts[id].title
     price.value=dataProducts[id].price
@@ -146,8 +138,11 @@ function update_item(id) {
     category.value=dataProducts[id].category
     totale.innerHTML=dataProducts[id].totale
     id_changer=id
-    title.focus(); // rendre le focus au debut
-      
+    // title.focus(); // rendre le focus au debut
+    scroll({
+        top:0,
+        behavior:'smooth'
+    })
    
 }
 
@@ -162,15 +157,77 @@ function changer_donne(id) {
             dataProducts[i].discout=discout.value
             dataProducts[i].totale=totale.innerHTML
             dataProducts[i].category=category.value
-            dataProducts[i].count=count.value
-           
+            dataProducts[i].count=count.value   
         } 
     }
 
    localStorage.setItem('product',JSON.stringify(dataProducts))
    showData(); 
    clearData()
-    btn_create.setAttribute("class", "create"); //attribuer le nom create à l'attribue class
-    btn_create.innerHTML="Create" //changer le nom du button 
+    // btn_create.setAttribute("class", "create"); //attribuer le nom create à l'attribue class
+    type_d="create"
+    btn_create.innerHTML="Create" ;//changer le nom du button 
+    
+}
+function changeMod(id){
+
+    if (id=="searchTitle") {
+        recherche_Mod="searchTitle"
+    }else{
+        recherche_Mod="searchCategory"
+    }
 }
 
+function Recherche(value) {
+    dataTrouve=[]
+    if(value!=null && value!=""){
+        //value=String.prototype.toLocaleLowerCase(value)
+        for (let i = 0; i < dataProducts.length; i++) {
+            if (recherche_Mod=="searchTitle") {
+                if (dataProducts[i].title.toLowerCase().includes(value.toLowerCase())) {
+                   
+                    dataTrouve.push(dataProducts[i]);
+                    showData_trouve();
+                }
+            }
+            
+            if (recherche_Mod=="searchCategory") {
+                if (dataProducts[i].category.toLowerCase().includes(value.toLowerCase())) {
+                    dataTrouve.push(dataProducts[i]);
+                    showData_trouve();
+                }
+            }
+   
+
+
+        }
+    }else{
+        showData();
+    }
+    
+}
+
+function showData_trouve() {  //affiche les données recherchés
+    let tabl=document.getElementById("tbody")
+    let donnes='' //variabe pour stocker les donner avant affichage (on peut les mettre direct dans tbdoy)"
+    
+   for (let i = 0; i < dataTrouve.length; i++) {
+     
+       donnes+=`
+       <tr">
+       <td id="id_p">${i+1}</td>
+       <td>${dataTrouve[i].title}</td>
+       <td>${dataTrouve[i].price}</td>
+       <td>${dataTrouve[i].taxes}</td>
+       <td>${dataTrouve[i].ads}</td>
+       <td>${dataTrouve[i].discout}</td>
+       <td>${dataTrouve[i].totale}</td>
+       <td>${dataTrouve[i].category}</td>
+       <td><button onclick="update_item(${i})"  id="update">updat</button></td>
+       <td><button onclick="delete_item(${i})" id="delete">delete</button></td> 
+    </tr>`
+       
+   }
+       tabl.innerHTML=donnes
+       
+}
